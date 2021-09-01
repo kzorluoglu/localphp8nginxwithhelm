@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: php8-project-deployment
+  labels:
+    app: php8-project-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: php8-project-deployment
+  template:
+    metadata:
+      labels:
+        app: php8-project-deployment
+    spec:
+      volumes:
+        # Create the shared files volume to be used in both pods
+        - name: php8-project-pv-storage
+          persistentVolumeClaim:
+            claimName: php8-project-pv-claim
+        # Add the ConfigMap we declared above as a volume for the pod
+        - name: nginx-config-volume
+          configMap:
+            name: php8-project-nginx-config
+      containers:
+        - name: php8-project-nginx
+          image: {{ .Values.nginx.image }}
+          ports:
+            - containerPort: 80
+          volumeMounts:
+            - name: php8-project-pv-storage
+              mountPath: {{ .Values.mountPath }}
+            - name: nginx-config-volume
+              mountPath: /etc/nginx/nginx.conf
+              subPath: nginx.conf
+        - name: php
+          image: {{ .Values.php.image }}
+          volumeMounts:
+            - name: php8-project-pv-storage
+              mountPath: {{ .Values.mountPath }}

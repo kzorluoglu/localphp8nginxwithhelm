@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: php8-project-deployment
+  labels:
+    app: php8-project-deployment
+spec:
+  ports:
+    - port: 33
+      targetPort: 80
+  selector:
+    app: php8-project-deployment
