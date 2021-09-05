@@ -11,7 +11,7 @@ spec:
   accessModes:
     - ReadWriteMany
   hostPath:
-    path: "/Users/korayzorluoglu/phpProjetcs/php8/app"
+    path: "/mnt1/minikubeprojects/php8/app"
 
 ---
 
